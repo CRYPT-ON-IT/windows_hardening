@@ -1,4 +1,20 @@
-﻿Function Invoke-HardeningKitty {
+﻿################################ EXECUTABLE PART ################################
+# Defines which parameters can be passed as arguments when the process is executed
+Param(
+    # Defines the 3 possible modes
+    [ValidateSet("Audit","Config","HailMary")]
+    [String]
+        # Defines the default value if the parameters are not defined
+        $Mode = "Audit",
+    # Parameter for the configuration file containing the policies that will be used in Audit mode or HailMary mode
+    [String]
+        # Defines the default value if the parameters are not defined
+        $ConfFile = "config.csv"
+)
+
+
+
+Function Invoke-HardeningKitty {
 
     <#
     .SYNOPSIS
@@ -2265,3 +2281,32 @@
     }
     Write-Output "`n"
 }
+
+
+
+
+################################ EXECUTABLE PART ################################
+
+# If the Audit mode is selected
+if($Mode -eq "Audit")
+{
+    # Audit machine with file ConfFile and generate logs
+    Invoke-HardeningKitty -Mode Audit -FileFindingList $ConfFile -SkipMachineInformation -Log 
+}
+
+# If the Config mode is selected
+if($Mode -eq "Config")
+{
+    # Extract machine configuration and generates logs
+    Invoke-HardeningKitty -Mode Config -Report -Log 
+}
+
+if($Mode -eq "HailMary")
+{
+    # Extract Machine information, creates a backup file and generates logs
+    Invoke-HardeningKitty -Mode Config -Backup -Log
+    # Applies the policies from the ConfFile on the machine and forces the computer to not restart
+    Invoke-HardeningKitty -Mode HailMary -FileFindingList $ConfFile -SkipMachineInformation -Log | Restart-computer -Force -Confirm:$false
+}
+
+################################################################################
