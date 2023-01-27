@@ -1,3 +1,21 @@
+# Hardening Kitty (Executable version)
+
+This fork is a project that allows you to apply hardening from a compiled version of HardeningKitty.
+
+To create it from this repository, you have to use 'ps2exe' and give the following parameters :
+
+>ps2exe -inputFile 'Invoke-HardeningKitty.ps1' -outputFile 'WindowsHardening.exe' -noConsole -UNICODEEncoding -iconFile 'incon.ico' -title 'HardeningKitty' -description 'This version of HardeningKitty has been mastered by CRYPTONIT' -company 'CRYPTONIT' -product 'HardeningKitty mastered v1.0' -version '1.0' -noOutput -noError -noVisualStyles
+
+The following commands are then available :
+
+- `WindowsHardening.exe -Mode Backup` (The equivalence as `Invoke-HardeningKitty -Mode Config -FileFindingList <file> -SkipMachineInformation -Log -LogFile <file> -Backup -BackupFile <file>`)
+- WindowsHardening.exe -Mode Config (The equivalence as `Invoke-HardeningKitty -Mode Config -Report -Log -LogFile <file>`)
+- WindowsHardening.exe -Mode HailMary (The equivalence as `Invoke-HardeningKitty -Mode HailMary -FileFindingList <file> -SkipMachineInformation -Log -LogFile <file>`)
+
+By default, logs are created with everycommand, and you can specify the output file location with `-LogFile <path>`. The default location of the log file is the root of the executable, and the name looks like : `hardening_<computername>_<date>.log`.
+
+When using backup mode, the backup file is saved to the root of the executable, and name as the following : `hardening_backup_<computername>_<date>.csv`.
+
 # HardeningKitty and Windows 10 Hardening
 
 ## Introduction
