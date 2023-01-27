@@ -2,14 +2,20 @@
 # Defines which parameters can be passed as arguments when the process is executed
 Param(
     # Defines the 3 possible modes
-    [ValidateSet("Audit","Config","HailMary")]
+    [ValidateSet("Audit","Config","HailMary","Backup")]
     [String]
         # Defines the default value if the parameters are not defined
         $Mode = "Audit",
     # Parameter for the configuration file containing the policies that will be used in Audit mode or HailMary mode
     [String]
         # Defines the default value if the parameters are not defined
-        $ConfFile = "config.csv"
+        $ConfFile = ".\hardening_configuration.csv",
+    [String]
+        # Defines the log default location if the parameters are not defined
+        $LogFile = 'hardening_' + $env:computername + '_' + (Get-Date -Format yyyy-MM-dd_HHmmss) + '.log',
+    [String]
+        # Defines the backup default location if the parameters are not defined
+        $BackupFile = 'hardening_backup_' + $env:computername + '_' + (Get-Date -Format yyyy-MM-dd_HHmmss) + '.csv'
 )
 
 
@@ -2293,22 +2299,26 @@ Function Invoke-HardeningKitty {
 if($Mode -eq "Audit")
 {
     # Audit machine with file ConfFile and generate logs
-    Invoke-HardeningKitty -Mode Audit -FileFindingList $ConfFile -SkipMachineInformation -Log 
+    Invoke-HardeningKitty -Mode Audit -FileFindingList $ConfFile -SkipMachineInformation -Log -LogFile $LogFile
+}
+
+if($Mode -eq "Backup")
+{
+    # Audit machine with file ConfFile and generate logs
+    Invoke-HardeningKitty -Mode Config -FileFindingList $ConfFile -SkipMachineInformation -Log -LogFile $LogFile -Backup -BackupFile $BackupFile
 }
 
 # If the Config mode is selected
 if($Mode -eq "Config")
 {
     # Extract machine configuration and generates logs
-    Invoke-HardeningKitty -Mode Config -Report -Log 
+    Invoke-HardeningKitty -Mode Config -Report -Log -LogFile $LogFile
 }
 
 if($Mode -eq "HailMary")
 {
-    # Extract Machine information, creates a backup file and generates logs
-    Invoke-HardeningKitty -Mode Config -Backup -Log
     # Applies the policies from the ConfFile on the machine and forces the computer to not restart
-    Invoke-HardeningKitty -Mode HailMary -FileFindingList $ConfFile -SkipMachineInformation -Log | Restart-computer -Force -Confirm:$false
+    Invoke-HardeningKitty -Mode HailMary -FileFindingList $ConfFile -SkipMachineInformation -Log -LogFile $LogFile
 }
 
 ################################################################################
