@@ -10,8 +10,8 @@ The following commands are then available :
 
 - `WindowsHardening.exe -Mode Audit` (The equivalence as `Invoke-HardeningKitty -Mode Audit -FileFindingList <file> -SkipMachineInformation -Log -LogFile <file>`)
 - `WindowsHardening.exe -Mode Backup` (The equivalence as `Invoke-HardeningKitty -Mode Config -FileFindingList <file> -SkipMachineInformation -Log -LogFile <file> -Backup -BackupFile <file>`)
-- WindowsHardening.exe -Mode Config (The equivalence as `Invoke-HardeningKitty -Mode Config -Report -Log -LogFile <file>`)
-- WindowsHardening.exe -Mode HailMary (The equivalence as `Invoke-HardeningKitty -Mode HailMary -FileFindingList <file> -SkipMachineInformation -Log -LogFile <file>`)
+- `WindowsHardening.exe` -Mode Config (The equivalence as `Invoke-HardeningKitty -Mode Config -Report -Log -LogFile <file>`)
+- `WindowsHardening.exe` -Mode HailMary (The equivalence as `Invoke-HardeningKitty -Mode HailMary -FileFindingList <file> -SkipMachineInformation -Log -LogFile <file>`)
 
 By default, logs are created with everycommand, and you can specify the output file location with `-LogFile <path>`. The default location of the log file is the root of the executable, and the name looks like : `hardening_<computername>_<date>.log`.
 
